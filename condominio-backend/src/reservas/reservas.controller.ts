@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
 import { ReservasService } from './reservas.service';
 import { Reserva } from './entities/reserva.entity';
 
@@ -21,7 +21,7 @@ export class ReservasController {
     return this.reservasService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(@Param('id') id: string, @Body() reserva: Partial<Reserva>) {
     return this.reservasService.update(+id, reserva);
   }

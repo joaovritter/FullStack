@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
 import { EnderecosService } from './enderecos.service';
 import { Endereco } from './entities/endereco.entity';
 
@@ -21,7 +21,7 @@ export class EnderecosController {
     return this.enderecosService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(@Param('id') id: string, @Body() endereco: Partial<Endereco>) {
     return this.enderecosService.update(+id, endereco);
   }

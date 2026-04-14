@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
 import { ContaCorrenteService } from './conta-corrente.service';
 import { ContaCorrente } from './entities/conta-corrente.entity';
 
@@ -21,7 +21,7 @@ export class ContaCorrenteController {
     return this.contaCorrenteService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(@Param('id') id: string, @Body() contaCorrente: Partial<ContaCorrente>) {
     return this.contaCorrenteService.update(+id, contaCorrente);
   }

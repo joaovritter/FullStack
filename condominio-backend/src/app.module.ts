@@ -31,7 +31,7 @@ import { MovContaCorrenteModule } from './mov-conta-corrente/mov-conta-corrente.
       host: 'localhost',
       port: 3306,
       username: 'root',
-      password: 'www.com.brj',
+      password: 'laboratorio',
       database: 'DBCONDOMINIO',
       autoLoadEntities: true,
       synchronize: false,

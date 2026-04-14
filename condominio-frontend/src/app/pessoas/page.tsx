@@ -24,7 +24,7 @@ export default function PessoasPage() {
       await api.put(`/pessoas/${editId}`, form);
       setEditId(null);
     } else {
-      await api.post("/pessoas", { ...form, DATA_CADASTRO: new Date() });
+      await api.post("/pessoas", { ...form, DATA_CADASTRO: new Date().toISOString().split('T')[0] });
     }
     setForm({ NOME: "", TIPO_PESSOA: "", CPF_CNPJ: "" });
     carregarPessoas();
