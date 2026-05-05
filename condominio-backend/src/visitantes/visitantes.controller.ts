@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '../auth/auth.guard'; // ajuste o caminho
 import { VisitantesService } from './visitantes.service';
 import { Visitante } from './entities/visitante.entity';
 
@@ -6,6 +7,7 @@ import { Visitante } from './entities/visitante.entity';
 export class VisitantesController {
   constructor(private readonly visitantesService: VisitantesService) {}
 
+  @UseGuards(AuthGuard)
   @Post()
   create(@Body() visitante: Partial<Visitante>) {
     return this.visitantesService.create(visitante);
@@ -21,11 +23,13 @@ export class VisitantesController {
     return this.visitantesService.findOne(+id);
   }
 
+  @UseGuards(AuthGuard)
   @Put(':id')
   update(@Param('id') id: string, @Body() visitante: Partial<Visitante>) {
     return this.visitantesService.update(+id, visitante);
   }
 
+  @UseGuards(AuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.visitantesService.remove(+id);

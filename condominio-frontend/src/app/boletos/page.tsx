@@ -1,116 +1,79 @@
 "use client";
 import { useState, useEffect } from "react";
-import api from "../services/api";
+import api from "../../services/api";
 
 export default function BoletosPage() {
-  const [boletos, setBoletos] = useState<any[]>([]);
-  const [moradores, setMoradores] = useState<any[]>([]);
-  const [form, setForm] = useState({ morador: "", vlBoleto: "", dtVencimento: "", status: "" });
-  const [editId, setEditId] = useState<number | null>(null);
+ const [boletos, setBoletos] = useState<any[]>([]);
+ const [form, setForm] = useState({ ID_MORADOR: "", VL_BOLETO: "", DT_VENCIMENTO: "", STATUS: "" });
+ const [editId, setEditId] = useState<number | null>(null);
 
-  useEffect(() => {
-    carregarBoletos();
-    carregarMoradores();
-  }, []);
+ useEffect(() => { carregar(); }, []);
 
-  const carregarBoletos = async () => {
-    const res = await api.get("/boletos");
-    setBoletos(res.data);
-  };
+ const carregar = async () => {
+   try {
+     const res = await api.get("/boletos");
+     setBoletos(res.data);
+   } catch (error) {
+     console.error("Erro ao carregar boletos:", error);
+   }
+ };
 
-  const carregarMoradores = async () => {
-    const res = await api.get("/moradores");
-    setMoradores(res.data);
-  };
+ const handleSubmit = async (e: any) => {
+   e.preventDefault();
+   try {
+     if (editId) {
+       await api.put(`/boletos/${editId}`, form);
+       setEditId(null);
+     } else {
+       await api.post("/boletos", form);
+     }
+     setForm({ ID_MORADOR: "", VL_BOLETO: "", DT_VENCIMENTO: "", STATUS: "" });
+     carregar();
+   } catch (error) {
+     console.error("Erro ao salvar boleto:", error);
+   }
+ };
 
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
-    const payload = {
-      morador: { idMorador: Number(form.morador) },
-      vlBoleto: form.vlBoleto ? Number(form.vlBoleto) : null,
-      dtVencimento: form.dtVencimento || null,
-      status: form.status || null,
-    };
-    if (editId) {
-      await api.patch(`/boletos/${editId}`, payload);
-      setEditId(null);
-    } else {
-      await api.post("/boletos", payload);
-    }
-    setForm({ morador: "", vlBoleto: "", dtVencimento: "", status: "" });
-    carregarBoletos();
-  };
+ const handleDelete = async (id: number) => {
+   if (confirm("Deseja excluir este boleto?")) {
+     try {
+       await api.delete(`/boletos/${id}`);
+       carregar();
+     } catch (error) {
+       console.error("Erro ao excluir boleto:", error);
+     }
+   }
+ };
 
-  const handleDelete = async (id: number) => {
-    await api.delete(`/boletos/${id}`);
-    carregarBoletos();
-  };
+ const handleEdit = (b: any) => {
+   setForm({ ID_MORADOR: b.ID_MORADOR, VL_BOLETO: b.VL_BOLETO, DT_VENCIMENTO: b.DT_VENCIMENTO, STATUS: b.STATUS });
+   setEditId(b.ID_BOLETO);
+ };
 
-  const handleEdit = (b: any) => {
-    setForm({
-      morador: b.morador?.idMorador || "",
-      vlBoleto: b.vlBoleto || "",
-      dtVencimento: b.dtVencimento || "",
-      status: b.status || "",
-    });
-    setEditId(b.idBoleto);
-  };
-
-  return (
-    <div className="p-6">
-      <h1 className="text-xl font-bold">Cadastro de Boletos</h1>
-
-      <form onSubmit={handleSubmit} className="flex gap-2 mt-4 flex-wrap">
-        <select
-          value={form.morador}
-          onChange={e => setForm({ ...form, morador: e.target.value })}
-          className="border p-2"
-        >
-          <option value="">Selecione Morador</option>
-          {moradores.map((m: any) => (
-            <option key={m.idMorador} value={m.idMorador}>
-              {m.pessoa?.nome || `Morador ${m.idMorador}`}
-            </option>
-          ))}
-        </select>
-        <input
-          type="number"
-          step="0.01"
-          value={form.vlBoleto}
-          placeholder="Valor"
-          onChange={e => setForm({ ...form, vlBoleto: e.target.value })}
-          className="border p-2"
-        />
-        <input
-          type="date"
-          value={form.dtVencimento}
-          onChange={e => setForm({ ...form, dtVencimento: e.target.value })}
-          className="border p-2"
-        />
-        <select
-          value={form.status}
-          onChange={e => setForm({ ...form, status: e.target.value })}
-          className="border p-2"
-        >
-          <option value="">Status</option>
-          <option value="Pago">Pago</option>
-          <option value="Pendente">Pendente</option>
-          <option value="Atrasado">Atrasado</option>
-        </select>
-        <button className="bg-blue-500 text-white px-4 py-2">
-          {editId ? "Atualizar" : "Salvar"}
-        </button>
-      </form>
-
-      <ul className="mt-6">
-        {boletos.map((b: any) => (
-          <li key={b.idBoleto} className="flex gap-2 my-2 items-center">
-            {b.morador?.pessoa?.nome || `Morador ${b.morador?.idMorador}`} - R$ {b.vlBoleto} - Venc: {b.dtVencimento} - {b.status}
-            <button onClick={() => handleEdit(b)} className="bg-yellow-500 px-2 py-1 text-white">Editar</button>
-            <button onClick={() => handleDelete(b.idBoleto)} className="bg-red-500 px-2 py-1 text-white">Excluir</button>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
+ return (
+   <div className="p-6">
+     <h1 className="text-xl font-bold">Boletos</h1>
+     <form onSubmit={handleSubmit} className="flex gap-2 mt-4 flex-wrap">
+       <input className="border p-2" placeholder="ID Morador" value={form.ID_MORADOR} onChange={e => setForm({ ...form, ID_MORADOR: e.target.value })}/>
+       <input className="border p-2" type="number" placeholder="Valor" value={form.VL_BOLETO} onChange={e => setForm({ ...form, VL_BOLETO: e.target.value })}/>
+       <input className="border p-2" type="date" value={form.DT_VENCIMENTO} onChange={e => setForm({ ...form, DT_VENCIMENTO: e.target.value })}/>
+       <select className="border p-2" value={form.STATUS} onChange={e => setForm({ ...form, STATUS: e.target.value })}>
+         <option value="">Selecione</option>
+         <option value="ABERTO">Aberto</option>
+         <option value="PAGO">Pago</option>
+         <option value="ATRASADO">Atrasado</option>
+       </select>
+       <button className="bg-blue-500 text-white px-4 py-2 rounded">{editId ? "Atualizar" : "Salvar"}</button>
+     </form>
+     <ul className="mt-6">
+       {boletos.map((b: any) => (
+         <li key={b.ID_BOLETO} className="flex gap-2 items-center border-b py-2">
+           <span className="flex-1">Morador {b.ID_MORADOR} - Valor R$ {b.VL_BOLETO} - {b.STATUS}</span>
+           <button onClick={() => handleEdit(b)} className="bg-yellow-500 text-white px-2 py-1 rounded">Editar</button>
+           <button onClick={() => handleDelete(b.ID_BOLETO)} className="bg-red-500 text-white px-2 py-1 rounded">Excluir</button>
+         </li>
+       ))}
+     </ul>
+   </div>
+ );
 }

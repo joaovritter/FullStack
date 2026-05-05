@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '../auth/auth.guard'; // ajuste o caminho
 import { FuncionariosService } from './funcionarios.service';
 import { Funcionario } from './entities/funcionario.entity';
 
@@ -6,6 +7,7 @@ import { Funcionario } from './entities/funcionario.entity';
 export class FuncionariosController {
   constructor(private readonly funcionariosService: FuncionariosService) {}
 
+  @UseGuards(AuthGuard)
   @Post()
   create(@Body() funcionario: Partial<Funcionario>) {
     return this.funcionariosService.create(funcionario);
@@ -21,11 +23,13 @@ export class FuncionariosController {
     return this.funcionariosService.findOne(+id);
   }
 
+  @UseGuards(AuthGuard)
   @Put(':id')
   update(@Param('id') id: string, @Body() funcionario: Partial<Funcionario>) {
     return this.funcionariosService.update(+id, funcionario);
   }
 
+  @UseGuards(AuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.funcionariosService.remove(+id);

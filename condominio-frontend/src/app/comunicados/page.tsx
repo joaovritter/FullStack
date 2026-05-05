@@ -1,110 +1,77 @@
 "use client";
 import { useState, useEffect } from "react";
-import api from "../services/api";
+import api from "../../services/api";
 
 export default function ComunicadosPage() {
-  const [comunicados, setComunicados] = useState<any[]>([]);
-  const [form, setForm] = useState({ titulo: "", mensagem: "", dtComunicado: "", hrComunicado: "", tipo: "" });
-  const [editId, setEditId] = useState<number | null>(null);
+ const [comunicados, setComunicados] = useState<any[]>([]);
+ const [form, setForm] = useState({ TITULO: "", MENSAGEM: "", DT_COMUNICADO: "", HR_COMUNICADO: "", TIPO: "" });
+ const [editId, setEditId] = useState<number | null>(null);
 
-  useEffect(() => {
-    carregarComunicados();
-  }, []);
+ useEffect(() => { carregar(); }, []);
 
-  const carregarComunicados = async () => {
-    const res = await api.get("/comunicados");
-    setComunicados(res.data);
-  };
+ const carregar = async () => {
+   try {
+     const res = await api.get("/comunicados");
+     setComunicados(res.data);
+   } catch (error) {
+     console.error("Erro ao carregar comunicados:", error);
+   }
+ };
 
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
-    const payload = {
-      titulo: form.titulo,
-      mensagem: form.mensagem,
-      dtComunicado: form.dtComunicado || null,
-      hrComunicado: form.hrComunicado || null,
-      tipo: form.tipo || null,
-    };
-    if (editId) {
-      await api.patch(`/comunicados/${editId}`, payload);
-      setEditId(null);
-    } else {
-      await api.post("/comunicados", payload);
-    }
-    setForm({ titulo: "", mensagem: "", dtComunicado: "", hrComunicado: "", tipo: "" });
-    carregarComunicados();
-  };
+ const handleSubmit = async (e: any) => {
+   e.preventDefault();
+   try {
+     if (editId) {
+       await api.put(`/comunicados/${editId}`, form);
+       setEditId(null);
+     } else {
+       await api.post("/comunicados", form);
+     }
+     setForm({ TITULO: "", MENSAGEM: "", DT_COMUNICADO: "", HR_COMUNICADO: "", TIPO: "" });
+     carregar();
+   } catch (error) {
+     console.error("Erro ao salvar comunicado:", error);
+   }
+ };
 
-  const handleDelete = async (id: number) => {
-    await api.delete(`/comunicados/${id}`);
-    carregarComunicados();
-  };
+ const handleDelete = async (id: number) => {
+   if (confirm("Deseja excluir este comunicado?")) {
+     try {
+       await api.delete(`/comunicados/${id}`);
+       carregar();
+     } catch (error) {
+       console.error("Erro ao excluir comunicado:", error);
+     }
+   }
+ };
 
-  const handleEdit = (c: any) => {
-    setForm({
-      titulo: c.titulo || "",
-      mensagem: c.mensagem || "",
-      dtComunicado: c.dtComunicado || "",
-      hrComunicado: c.hrComunicado || "",
-      tipo: c.tipo || "",
-    });
-    setEditId(c.idComunicado);
-  };
+ const handleEdit = (c: any) => {
+   setForm({ TITULO: c.TITULO, MENSAGEM: c.MENSAGEM, DT_COMUNICADO: c.DT_COMUNICADO, HR_COMUNICADO: c.HR_COMUNICADO, TIPO: c.TIPO });
+   setEditId(c.ID_COMUNICADO);
+ };
 
-  return (
-    <div className="p-6">
-      <h1 className="text-xl font-bold">Cadastro de Comunicados</h1>
-
-      <form onSubmit={handleSubmit} className="flex gap-2 mt-4 flex-wrap">
-        <input
-          value={form.titulo}
-          placeholder="Título"
-          onChange={e => setForm({ ...form, titulo: e.target.value })}
-          className="border p-2"
-        />
-        <input
-          value={form.mensagem}
-          placeholder="Mensagem"
-          onChange={e => setForm({ ...form, mensagem: e.target.value })}
-          className="border p-2"
-        />
-        <input
-          type="date"
-          value={form.dtComunicado}
-          onChange={e => setForm({ ...form, dtComunicado: e.target.value })}
-          className="border p-2"
-        />
-        <input
-          type="time"
-          value={form.hrComunicado}
-          onChange={e => setForm({ ...form, hrComunicado: e.target.value })}
-          className="border p-2"
-        />
-        <select
-          value={form.tipo}
-          onChange={e => setForm({ ...form, tipo: e.target.value })}
-          className="border p-2"
-        >
-          <option value="">Tipo</option>
-          <option value="AVISO">Aviso</option>
-          <option value="COMUNICADO">Comunicado</option>
-          <option value="NOTIFICAÇÃO">Notificação</option>
-          <option value="URGENTE">Urgente</option>
-        </select>
-        <button className="bg-blue-500 text-white px-4 py-2">
-          {editId ? "Atualizar" : "Salvar"}
-        </button>
-      </form>
-
-      <ul className="mt-6">
-        {comunicados.map((c: any) => (
-          <li key={c.idComunicado} className="flex gap-2 my-2 items-center">
-            [{c.tipo}] {c.titulo} - {c.dtComunicado} {c.hrComunicado}
-            <button onClick={() => handleEdit(c)} className="bg-yellow-500 px-2 py-1 text-white">Editar</button>
-            <button onClick={() => handleDelete(c.idComunicado)} className="bg-red-500 px-2 py-1 text-white">Excluir</button>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
+ return (
+   <div className="p-6">
+     <h1 className="text-xl font-bold">Comunicados</h1>
+     <form onSubmit={handleSubmit} className="flex flex-col gap-2 mt-4">
+       <input className="border p-2" placeholder="Título" value={form.TITULO} onChange={e => setForm({ ...form, TITULO: e.target.value })}/>
+       <textarea className="border p-2" placeholder="Mensagem" value={form.MENSAGEM} onChange={e => setForm({ ...form, MENSAGEM: e.target.value })}/>
+       <div className="flex gap-2">
+         <input className="border p-2" type="date" value={form.DT_COMUNICADO} onChange={e => setForm({ ...form, DT_COMUNICADO: e.target.value })}/>
+         <input className="border p-2" type="time" value={form.HR_COMUNICADO} onChange={e => setForm({ ...form, HR_COMUNICADO: e.target.value })}/>
+         <input className="border p-2" placeholder="Tipo" value={form.TIPO} onChange={e => setForm({ ...form, TIPO: e.target.value })}/>
+       </div>
+       <button className="bg-blue-500 text-white px-4 py-2 rounded w-fit">{editId ? "Atualizar" : "Salvar"}</button>
+     </form>
+     <ul className="mt-6">
+       {comunicados.map((c: any) => (
+         <li key={c.ID_COMUNICADO} className="flex gap-2 items-center border-b py-2">
+           <span className="flex-1">{c.TITULO} - {c.TIPO}</span>
+           <button onClick={() => handleEdit(c)} className="bg-yellow-500 text-white px-2 py-1 rounded">Editar</button>
+           <button onClick={() => handleDelete(c.ID_COMUNICADO)} className="bg-red-500 text-white px-2 py-1 rounded">Excluir</button>
+         </li>
+       ))}
+     </ul>
+   </div>
+ );
 }

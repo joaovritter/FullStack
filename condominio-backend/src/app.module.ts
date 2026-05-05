@@ -23,15 +23,20 @@ import { PagamentosModule } from './pagamentos/pagamentos.module';
 import { RecebimentosModule } from './recebimentos/recebimentos.module';
 import { ContaCorrenteModule } from './conta-corrente/conta-corrente.module';
 import { MovContaCorrenteModule } from './mov-conta-corrente/mov-conta-corrente.module';
+import { AuthModule } from './auth/auth.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',
       port: 3306,
       username: 'root',
-      password: 'laboratorio',
+      password: 'www.com.brj',
       database: 'DBCONDOMINIO',
       autoLoadEntities: true,
       synchronize: false,
@@ -57,6 +62,7 @@ import { MovContaCorrenteModule } from './mov-conta-corrente/mov-conta-corrente.
     RecebimentosModule,
     ContaCorrenteModule,
     MovContaCorrenteModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

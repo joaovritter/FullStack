@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '../auth/auth.guard'; // ajuste o caminho
 import { PessoasService } from './pessoas.service';
 import { Pessoa } from './entities/pessoa.entity';
 
@@ -6,13 +7,8 @@ import { Pessoa } from './entities/pessoa.entity';
 export class PessoasController {
   constructor(private readonly pessoasService: PessoasService) {}
 
-  @Post()
-  create(@Body() pessoa: Partial<Pessoa>) {
-    return this.pessoasService.create(pessoa);
-  }
-
   @Get()
-  findAll() {
+  findAll(): Promise<Pessoa[]> {
     return this.pessoasService.findAll();
   }
 
@@ -21,13 +17,21 @@ export class PessoasController {
     return this.pessoasService.findOne(+id);
   }
 
-  @Put(':id')
-  update(@Param('id') id: string, @Body() dados: Partial<Pessoa>) {
-    return this.pessoasService.update(+id, dados);
+  @UseGuards(AuthGuard)
+  @Post()
+  create(@Body() pessoa: Pessoa): Promise<Pessoa> {
+    return this.pessoasService.create(pessoa);
   }
 
+  @UseGuards(AuthGuard)
+  @Put(':id')
+  update(@Param('id') id: number, @Body() dados: Partial<Pessoa>): Promise<Pessoa> {
+    return this.pessoasService.update(id, dados);
+  }
+
+  @UseGuards(AuthGuard)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.pessoasService.remove(+id);
+  remove(@Param('id') id: number): Promise<void> {
+    return this.pessoasService.remove(id);
   }
 }

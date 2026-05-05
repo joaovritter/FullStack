@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '../auth/auth.guard'; // ajuste o caminho
 import { ContasPagarService } from './contas-pagar.service';
 import { ContaPagar } from './entities/conta-pagar.entity';
 
@@ -6,6 +7,7 @@ import { ContaPagar } from './entities/conta-pagar.entity';
 export class ContasPagarController {
   constructor(private readonly contasPagarService: ContasPagarService) {}
 
+  @UseGuards(AuthGuard)
   @Post()
   create(@Body() contaPagar: Partial<ContaPagar>) {
     return this.contasPagarService.create(contaPagar);
@@ -21,11 +23,13 @@ export class ContasPagarController {
     return this.contasPagarService.findOne(+id);
   }
 
+  @UseGuards(AuthGuard)
   @Put(':id')
   update(@Param('id') id: string, @Body() contaPagar: Partial<ContaPagar>) {
     return this.contasPagarService.update(+id, contaPagar);
   }
 
+  @UseGuards(AuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.contasPagarService.remove(+id);
