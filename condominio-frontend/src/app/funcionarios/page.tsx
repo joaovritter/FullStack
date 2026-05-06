@@ -1,74 +1,182 @@
 "use client";
 import { useState, useEffect } from "react";
 import api from "../../services/api";
+import PageLayout from "../../components/PageLayout";
 
 export default function FuncionariosPage() {
- const [funcionarios, setFuncionarios] = useState<any[]>([]);
- const [form, setForm] = useState({ ID_PESSOA: "", FUNCAO: "", DATA_ADMISSAO: "", SALARIO: "" });
- const [editId, setEditId] = useState<number | null>(null);
+  const [funcionarios, setFuncionarios] = useState<any[]>([]);
+  const [form, setForm] = useState({ ID_PESSOA: "", FUNCAO: "", DATA_ADMISSAO: "", SALARIO: "" });
+  const [editId, setEditId] = useState<number | null>(null);
 
- useEffect(() => { carregar(); }, []);
+  useEffect(() => { carregar(); }, []);
 
- const carregar = async () => {
-   try {
-     const res = await api.get("/funcionarios");
-     setFuncionarios(res.data);
-   } catch (error) {
-     console.error("Erro ao carregar funcionários:", error);
-   }
- };
+  const carregar = async () => {
+    try {
+      const res = await api.get("/funcionarios");
+      setFuncionarios(res.data);
+    } catch (error) {
+      console.error("Erro ao carregar funcionários:", error);
+    }
+  };
 
- const handleSubmit = async (e: any) => {
- e.preventDefault();
- try {
-   if (editId) {
-     await api.put(`/funcionarios/${editId}`, form);
-     setEditId(null);
-   } else {
-     await api.post("/funcionarios", form);
-   }
-   setForm({ ID_PESSOA: "", FUNCAO: "", DATA_ADMISSAO: "", SALARIO: "" });
-   carregar();
- } catch (error) {
-   console.error("Erro ao salvar funcionário:", error);
- }
- };
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    try {
+      if (editId) {
+        await api.put(`/funcionarios/${editId}`, form);
+        setEditId(null);
+      } else {
+        await api.post("/funcionarios", form);
+      }
+      setForm({ ID_PESSOA: "", FUNCAO: "", DATA_ADMISSAO: "", SALARIO: "" });
+      carregar();
+    } catch (error) {
+      console.error("Erro ao salvar funcionário:", error);
+    }
+  };
 
- const handleDelete = async (id: number) => {
- if (confirm("Deseja excluir este funcionário?")) {
-   try {
-     await api.delete(`/funcionarios/${id}`);
-     carregar();
-   } catch (error) {
-     console.error("Erro ao excluir funcionário:", error);
-   }
- }
- };
+  const handleDelete = async (id: number) => {
+    if (confirm("Deseja excluir este funcionário?")) {
+      try {
+        await api.delete(`/funcionarios/${id}`);
+        carregar();
+      } catch (error) {
+        console.error("Erro ao excluir funcionário:", error);
+      }
+    }
+  };
 
- const handleEdit = (f: any) => {
- setForm({ ID_PESSOA: f.ID_PESSOA, FUNCAO: f.FUNCAO, DATA_ADMISSAO: f.DATA_ADMISSAO, SALARIO: f.SALARIO });
- setEditId(f.ID_FUNCIONARIO);
- };
+  const handleEdit = (f: any) => {
+    setForm({ ID_PESSOA: f.ID_PESSOA, FUNCAO: f.FUNCAO, DATA_ADMISSAO: f.DATA_ADMISSAO, SALARIO: f.SALARIO });
+    setEditId(f.ID_FUNCIONARIO);
+  };
 
- return (
- <div className="p-6">
- <h1 className="text-xl font-bold">Cadastro de Funcionários</h1>
- <form onSubmit={handleSubmit} className="flex gap-2 mt-4 flex-wrap">
- <input className="border p-2" placeholder="ID Pessoa" value={form.ID_PESSOA} onChange={e => setForm({ ...form, ID_PESSOA: e.target.value })}/>
- <input className="border p-2" placeholder="Função" value={form.FUNCAO} onChange={e => setForm({ ...form, FUNCAO: e.target.value })}/>
- <input className="border p-2" type="date" value={form.DATA_ADMISSAO} onChange={e => setForm({ ...form, DATA_ADMISSAO: e.target.value })}/>
- <input className="border p-2" type="number" placeholder="Salário" value={form.SALARIO} onChange={e => setForm({ ...form, SALARIO: e.target.value })}/>
- <button className="bg-blue-500 text-white px-4 py-2 rounded">{editId ? "Atualizar" : "Salvar"}</button>
- </form>
- <ul className="mt-6">
- {funcionarios.map((f: any) => (
- <li key={f.ID_FUNCIONARIO} className="flex gap-2 items-center border-b py-2">
- <span className="flex-1">Pessoa {f.ID_PESSOA} - {f.FUNCAO} - Salário R$ {f.SALARIO}</span>
- <button onClick={() => handleEdit(f)} className="bg-yellow-500 text-white px-2 py-1 rounded">Editar</button>
- <button onClick={() => handleDelete(f.ID_FUNCIONARIO)} className="bg-red-500 text-white px-2 py-1 rounded">Excluir</button>
- </li>
- ))}
- </ul>
- </div>
- );
+  return (
+    <PageLayout
+      title="Funcionários"
+      description="Gestão de quadro de colaboradores, folha de pagamento e datas de admissão."
+    >
+      <div className="flex justify-between items-center mb-6">
+        <h3 className="text-xl font-bold text-slate-800 tracking-tight">
+          {editId ? "Editar Funcionário" : "Novo Funcionário"}
+        </h3>
+        {editId && (
+          <button
+            onClick={() => {
+              setEditId(null);
+              setForm({ ID_PESSOA: "", FUNCAO: "", DATA_ADMISSAO: "", SALARIO: "" });
+            }}
+            className="text-sm font-bold text-slate-500 hover:text-[#A0006D] transition-colors"
+          >
+            Cancelar Edição
+          </button>
+        )}
+      </div>
+
+      <form onSubmit={handleSubmit} className="flex flex-col md:flex-row gap-4 mb-10 bg-slate-50/50 p-6 rounded-2xl border border-slate-100 flex-wrap">
+        <div className="flex-1 min-w-[200px]">
+          <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">
+            ID Pessoa <span className="text-[#A0006D]">*</span>
+          </label>
+          <input
+            required
+            className="w-full border border-slate-200 bg-white px-4 py-3 rounded-xl focus:outline-none focus:border-[#4A8BDF] focus:ring-4 focus:ring-[#4A8BDF]/10 transition-all font-medium text-slate-800 placeholder-slate-400"
+            placeholder="ID da Pessoa" value={form.ID_PESSOA}
+            onChange={e => setForm({ ...form, ID_PESSOA: e.target.value })}
+          />
+        </div>
+
+        <div className="flex-1 min-w-[200px]">
+          <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">
+            Função <span className="text-[#A0006D]">*</span>
+          </label>
+          <input
+            required
+            className="w-full border border-slate-200 bg-white px-4 py-3 rounded-xl focus:outline-none focus:border-[#4A8BDF] focus:ring-4 focus:ring-[#4A8BDF]/10 transition-all font-medium text-slate-800 placeholder-slate-400"
+            placeholder="Ex: Zelador, Porteiro" value={form.FUNCAO}
+            onChange={e => setForm({ ...form, FUNCAO: e.target.value })}
+          />
+        </div>
+
+        <div className="flex-1 min-w-[200px]">
+          <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">
+            Data Admissão <span className="text-[#A0006D]">*</span>
+          </label>
+          <input
+            required type="date"
+            className="w-full border border-slate-200 bg-white px-4 py-3 rounded-xl focus:outline-none focus:border-[#4A8BDF] focus:ring-4 focus:ring-[#4A8BDF]/10 transition-all font-medium text-slate-800"
+            value={form.DATA_ADMISSAO}
+            onChange={e => setForm({ ...form, DATA_ADMISSAO: e.target.value })}
+          />
+        </div>
+
+        <div className="flex-1 min-w-[200px]">
+          <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">
+            Salário Base (R$)
+          </label>
+          <input
+            type="number"
+            className="w-full border border-slate-200 bg-white px-4 py-3 rounded-xl focus:outline-none focus:border-[#4A8BDF] focus:ring-4 focus:ring-[#4A8BDF]/10 transition-all font-medium text-slate-800 placeholder-slate-400"
+            placeholder="Ex: 2500" value={form.SALARIO}
+            onChange={e => setForm({ ...form, SALARIO: e.target.value })}
+          />
+        </div>
+
+        <div className="flex items-end mt-4 md:mt-0">
+          <button
+            type="submit"
+            className="w-full md:w-auto bg-[#4A8BDF] hover:bg-[#3a70b3] text-white px-8 py-3 rounded-xl font-bold shadow-md shadow-[#4A8BDF]/20 transition-all transform hover:-translate-y-0.5"
+          >
+            {editId ? "Atualizar" : "Salvar Funcionário"}
+          </button>
+        </div>
+      </form>
+
+      <div className="overflow-x-auto">
+        <table className="w-full text-left border-collapse">
+          <thead>
+            <tr className="border-b-2 border-slate-100">
+              <th className="py-4 px-6 text-xs font-bold text-[#A0006D] uppercase tracking-widest bg-slate-50 rounded-tl-xl">ID de Registo</th>
+              <th className="py-4 px-6 text-xs font-bold text-[#A0006D] uppercase tracking-widest bg-slate-50">Ref. Pessoa</th>
+              <th className="py-4 px-6 text-xs font-bold text-[#A0006D] uppercase tracking-widest bg-slate-50">Função</th>
+              <th className="py-4 px-6 text-xs font-bold text-[#A0006D] uppercase tracking-widest bg-slate-50">Salário / Admissão</th>
+              <th className="py-4 px-6 text-xs font-bold text-[#A0006D] uppercase tracking-widest bg-slate-50 text-right rounded-tr-xl">Ações Rápidas</th>
+            </tr>
+          </thead>
+          <tbody>
+            {funcionarios.length === 0 ? (
+              <tr>
+                <td colSpan={5} className="py-8 text-center text-slate-500 font-medium">Nenhum funcionário encontrado.</td>
+              </tr>
+            ) : (
+              funcionarios.map((f: any) => (
+                <tr key={f.ID_FUNCIONARIO} className="border-b border-slate-50 hover:bg-slate-50/80 transition-colors group">
+                  <td className="py-4 px-6 font-bold text-slate-800">#{f.ID_FUNCIONARIO}</td>
+                  <td className="py-4 px-6 font-medium text-slate-600">
+                    <span className="bg-blue-50 text-blue-600 px-2 py-1 rounded-md text-xs font-bold w-fit">
+                      ID {f.ID_PESSOA}
+                    </span>
+                  </td>
+                  <td className="py-4 px-6 font-medium text-slate-800">{f.FUNCAO}</td>
+                  <td className="py-4 px-6 text-slate-600 font-medium">
+                    R$ {f.SALARIO} <span className="text-slate-400 text-xs ml-1">({f.DATA_ADMISSAO})</span>
+                  </td>
+                  <td className="py-4 px-6 text-right">
+                    <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <button onClick={() => handleEdit(f)} className="p-2 text-slate-400 hover:text-[#4A8BDF] hover:bg-[#4A8BDF]/10 rounded-lg transition-colors" title="Editar">
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                      </button>
+                      <button onClick={() => handleDelete(f.ID_FUNCIONARIO)} className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors" title="Excluir">
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
+    </PageLayout>
+  );
 }
