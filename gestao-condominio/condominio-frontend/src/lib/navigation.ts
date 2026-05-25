@@ -1,0 +1,16 @@
+export const menuItems = [
+    { name: "Dashboard", href: "/dashboard", color: "bg-[#4A8BDF]" },
+    { name: "Pessoas", href: "/pessoas", color: "bg-blue-500" },
+    { name: "Moradores", href: "/moradores", color: "bg-indigo-500" },
+    { name: "Funcionários", href: "/funcionarios", color: "bg-orange-500" },
+    { name: "Fornecedores", href: "/fornecedores", color: "bg-gray-600" },
+    { name: "Visitantes", href: "/visitantes", color: "bg-green-500" },
+    { name: "Unidades", href: "/unidades", color: "bg-purple-500" },
+    { name: "Áreas Comuns", href: "/areas-comuns", color: "bg-emerald-500" },
+    { name: "Reservas", href: "/reservas", color: "bg-rose-500" },
+    { name: "Boletos", href: "/boletos", color: "bg-amber-500" },
+    { name: "Comunicados", href: "/comunicados", color: "bg-sky-500" },
+    { name: "Contratos", href: "/contratos", color: "bg-slate-600" },
+    { name: "Contas a Pagar", color: "bg-red-500", href: "/contas-pagar" },
+    { name: "Contas a Receber", color: "bg-teal-500", href: "/contas-receber" },
+];
