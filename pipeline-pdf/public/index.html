@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pipeline de PDFs | Nexity</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+            <polyline points="10 9 9 9 8 9"/>
+          </svg>
+        </div>
+        <span class="logo-text">PDF<strong>Pipeline</strong></span>
+      </div>
+
+      <div class="nav-label">Menu</div>
+      <nav class="sidebar-nav">
+        <a href="#" class="nav-item active" onclick="showSection('dashboard'); return false;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/>
+            <rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/>
+          </svg>
+          Dashboard
+        </a>
+        <a href="#" class="nav-item" onclick="showSection('upload'); return false;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/>
+            <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/>
+          </svg>
+          Upload PDF
+        </a>
+        <a href="#" class="nav-item" onclick="showSection('documentos'); return false;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/>
+            <line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/>
+            <line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>
+          </svg>
+          Documentos
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-info">
+          <div class="user-avatar">JV</div>
+          <div>
+            <div class="user-name">João Vitor</div>
+            <div class="user-role">FullStack · UFN</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="menu-toggle" onclick="toggleSidebar()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+            </svg>
+          </button>
+          <div>
+            <h1 class="page-title" id="pageTitle">Dashboard</h1>
+            <p class="page-sub" id="pageSub">Visão geral do sistema de processamento</p>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <div class="status-badge" id="dbStatus">
+            <span class="status-dot"></span>
+            Conectando...
+          </div>
+        </div>
+      </header>
+
+      <!-- ===== DASHBOARD ===== -->
+      <section class="section active" id="sec-dashboard" data-screen-label="Dashboard">
+        <div class="hero-panel" data-rise style="--d:0ms">
+          <div class="hero-copy">
+            <div class="hero-kicker">Controle financeiro inteligente</div>
+            <h2>Transforme PDFs em dados acionáveis com uma leitura premium.</h2>
+            <p>
+              Pipeline PDF automatiza extração de faturas, organiza indicadores e destaca vencimentos
+              em um painel pensado para operação, análise e decisão rápida.
+            </p>
+            <div class="hero-actions">
+              <button class="btn btn-primary" onclick="showSection('upload'); return false;">
+                Processar PDF
+              </button>
+              <button class="btn btn-outline" onclick="showSection('documentos'); return false;">
+                Ver registros
+              </button>
+            </div>
+          </div>
+
+          <div class="hero-stack">
+            <div class="hero-card hero-card-main">
+              <span class="hero-card-label">Fluxo em tempo real</span>
+              <strong>Pipeline visual</strong>
+              <p>Da entrada do PDF até a persistência no banco, com feedback claro e animações suaves.</p>
+            </div>
+            <div class="hero-mini-grid">
+              <div class="hero-mini">
+                <span>Upload</span>
+                <strong>1 clique</strong>
+              </div>
+              <div class="hero-mini">
+                <span>Extração</span>
+                <strong>Automática</strong>
+              </div>
+              <div class="hero-mini">
+                <span>Visual</span>
+                <strong>Contínuo</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card" data-rise style="--d:0ms; --tint:var(--brand-50)">
+            <div class="stat-top">
+              <span class="stat-label">Documentos Processados</span>
+              <div class="stat-icon brand">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              </div>
+            </div>
+            <div class="stat-value brand" id="statTotal" data-count>—</div>
+            <div class="stat-foot"><span class="up"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="18 15 12 9 6 15"/></svg>processados</span> no pipeline</div>
+          </div>
+
+          <div class="stat-card" data-rise style="--d:80ms; --tint:var(--blue-bg)">
+            <div class="stat-top">
+              <span class="stat-label">Valor Total Acumulado</span>
+              <div class="stat-icon blue">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              </div>
+            </div>
+            <div class="stat-value blue" id="statSoma">—</div>
+            <div class="stat-foot">somatório de faturas extraídas</div>
+          </div>
+
+          <div class="stat-card" data-rise style="--d:160ms; --tint:var(--violet-bg)">
+            <div class="stat-top">
+              <span class="stat-label">Maior Fatura</span>
+              <div class="stat-icon violet">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+              </div>
+            </div>
+            <div class="stat-value violet" id="statMaior">—</div>
+            <div class="stat-foot">pico de valor único registrado</div>
+          </div>
+
+          <div class="stat-card" data-rise style="--d:240ms; --tint:var(--amber-bg)">
+            <div class="stat-top">
+              <span class="stat-label">Último Upload</span>
+              <div class="stat-icon amber">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              </div>
+            </div>
+            <div class="stat-value amber" id="statRecente" style="font-size:24px">—</div>
+            <div class="stat-foot">data do registro mais recente</div>
+          </div>
+        </div>
+
+        <div class="dash-row">
+          <!-- CHART -->
+          <div class="card chart-card" data-rise style="--d:300ms">
+            <div class="card-header">
+              <h2 class="card-title">
+                <span class="ttl-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></span>
+                Valor processado
+              </h2>
+              <span class="chart-hint"><span><span class="dotlegend"></span>acumulado</span> · <b id="chartTotal">—</b></span>
+            </div>
+            <div class="card-body">
+              <div class="chart-wrap" id="chartWrap"></div>
+            </div>
+          </div>
+
+          <!-- DONUT -->
+          <div class="card donut-card" data-rise style="--d:380ms">
+            <div class="card-header">
+              <h2 class="card-title">
+                <span class="ttl-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg></span>
+                Vencimentos
+              </h2>
+            </div>
+            <div class="card-body">
+              <div class="donut-wrap" id="donutWrap"></div>
+              <div class="donut-legend" id="donutLegend"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" data-rise style="--d:460ms">
+          <div class="card-header">
+            <h2 class="card-title">
+              <span class="ttl-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="12 6 12 12 16 14"/><circle cx="12" cy="12" r="10"/></svg></span>
+              Uploads Recentes
+            </h2>
+            <button class="btn btn-sm btn-ghost" onclick="showSection('documentos')">Ver todos</button>
+          </div>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr><th>Arquivo</th><th>Cliente</th><th>Valor</th><th>Data</th></tr>
+              </thead>
+              <tbody id="tabelaRecentes">
+                <tr><td colspan="4" class="empty-state">Nenhum documento processado ainda.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== UPLOAD ===== -->
+      <section class="section" id="sec-upload" data-screen-label="Upload">
+        <div class="upload-grid">
+          <div class="card upload-card" data-rise style="--d:0ms">
+            <div class="card-header">
+              <h2 class="card-title">
+                <span class="ttl-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg></span>
+                Processar Novo PDF
+              </h2>
+            </div>
+
+            <div class="drop-zone" id="dropZone">
+              <div class="drop-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              </div>
+              <p class="drop-title">Arraste o PDF aqui</p>
+              <p class="drop-sub">ou clique para selecionar do computador</p>
+              <input type="file" id="pdfInput" accept="application/pdf" hidden />
+              <button class="btn btn-outline" onclick="document.getElementById('pdfInput').click()">Escolher arquivo</button>
+            </div>
+
+            <div class="file-preview" id="filePreview" style="display:none">
+              <div class="file-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              </div>
+              <div class="file-info">
+                <div class="file-name" id="fileName">arquivo.pdf</div>
+                <div class="file-size" id="fileSize">0 KB</div>
+              </div>
+              <button class="btn-remove" onclick="limparArquivo()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </button>
+            </div>
+
+            <button class="btn btn-primary btn-full" id="btnUpload" onclick="fazerUpload()" disabled>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+              Processar PDF
+            </button>
+
+            <div class="progress-wrap" id="progressWrap" style="display:none">
+              <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+              <p class="progress-text" id="progressText">Processando...</p>
+            </div>
+          </div>
+
+          <div class="card result-card" id="resultCard" style="display:none">
+            <div class="card-header">
+              <h2 class="card-title">
+                <span class="ttl-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>
+                Dados Extraídos
+              </h2>
+              <span class="badge badge-success"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Sucesso</span>
+            </div>
+            <div class="result-grid" id="resultGrid"></div>
+          </div>
+
+          <div class="card info-card" data-rise style="--d:120ms">
+            <div class="card-header">
+              <h2 class="card-title">O que é extraído?</h2>
+            </div>
+            <ul class="info-list">
+              <li><div class="info-icon">$</div><div><strong>Valor Total</strong><span class="muted">Primeiro valor monetário em R$ encontrado no documento</span></div></li>
+              <li><div class="info-icon b2">#</div><div><strong>CNPJ</strong><span class="muted">Identificação fiscal no formato XX.XXX.XXX/XXXX-XX</span></div></li>
+              <li><div class="info-icon b3">@</div><div><strong>E-mail</strong><span class="muted">Endereço do cliente após o rótulo "E-mail:"</span></div></li>
+              <li><div class="info-icon b4">◷</div><div><strong>Datas</strong><span class="muted">Emissão e vencimento no formato DD/MM/AAAA</span></div></li>
+              <li><div class="info-icon b5">◳</div><div><strong>Cliente</strong><span class="muted">Nome após o rótulo "Nome:" no documento</span></div></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== DOCUMENTOS ===== -->
+      <section class="section" id="sec-documentos" data-screen-label="Documentos">
+        <div class="card" data-rise>
+          <div class="card-header">
+            <h2 class="card-title">
+              <span class="ttl-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></span>
+              Documentos Processados
+            </h2>
+            <div class="card-actions">
+              <input class="search-input" type="text" id="searchInput" placeholder="Buscar arquivo, cliente, CNPJ..." oninput="filtrarTabela()" />
+              <button class="btn btn-sm btn-outline" onclick="carregarDocumentos()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+                Atualizar
+              </button>
+            </div>
+          </div>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th><th>Arquivo</th><th>Cliente / Nº Fatura</th><th>CNPJ</th>
+                  <th>E-mail</th><th>Emissão</th><th>Vencimento</th><th>Valor Total</th><th>Upload</th><th></th>
+                </tr>
+              </thead>
+              <tbody id="tabelaDocumentos">
+                <tr><td colspan="10" class="empty-state">Nenhum documento encontrado.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <div class="toast-wrap" id="toastWrap"></div>
+  <script src="app.js"></script>
+</body>
+</html>
