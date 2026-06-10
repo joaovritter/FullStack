@@ -1,6 +1,5 @@
 // ============================================================================
 //  OrquestradorAgendamento.js  —  Serviço que ORQUESTRA a transação
-//  (equivalente ao OrquestradorSolicitacao do material — PARTE 1)
 //
 //  Responsabilidades:
 //    1. Iniciar a transação (cria uma conexão exclusiva).

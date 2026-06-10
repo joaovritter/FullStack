@@ -1,14 +1,7 @@
 // ============================================================================
-//  TransacaoBanco.js  —  Gerenciador de Transações  (PARTE 1 do material)
+//  TransacaoBanco.js  —  Gerenciador de Transações
 //
-//  É a MESMA classe do material da aula, porém ADAPTADA de mysql2 para "pg".
-//
-//  Equivalências mysql2  ->  pg:
-//    db.getConnection()        ->  pool.connect()      (pega um client do pool)
-//    connection.beginTransaction() ->  client.query('BEGIN')
-//    connection.commit()       ->  client.query('COMMIT')
-//    connection.rollback()     ->  client.query('ROLLBACK')
-//    connection.release()      ->  client.release()
+//  classe do material da aula, adaptada de mysql para pg
 //
 //  A ideia central permanece: iniciar a transação cria uma conexão EXCLUSIVA,
 //  que é compartilhada por todos os services para que tudo execute como UMA
