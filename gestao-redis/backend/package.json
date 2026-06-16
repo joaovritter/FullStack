@@ -1,0 +1,18 @@
+{
+  "name": "gestao-redis-backend",
+  "version": "1.0.0",
+  "description": "ERP com Redis (Upstash): cache de relatorios + rate limiting no login",
+  "main": "index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2",
+    "redis": "^4.7.0"
+  }
+}
